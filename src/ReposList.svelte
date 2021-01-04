@@ -20,15 +20,19 @@
     
 	async function getGithubData() {
         const githubSearchResponse = await github_api.get('repositories?q=' + query + '&sort=stars&order=desc')
-        if (githubSearchResponse.status != '200') {
-            throw new Error(githubSearchResponse.statusText);
-        }
-        else {
-            let githubData = githubSearchResponse.data.items; 
-            let topGithubResults = []
-            for (let i = 0; i < Math.min(githubData.length, searchResultsCount); i++) {
-                const rawObject = githubData[i];
-                topGithubResults.push({
+        .catch(error => {
+            if (error.response.status == '403') {
+                throw new Error("There are to many requests to Github. \n Just relax for a second and continue :)")
+            } else {
+                throw new Error("We got a strange error from Github :(");
+            } 
+        })
+        let githubData = githubSearchResponse.data.items; 
+        let topGithubResults = []
+        for (let i = 0; i < Math.min(githubData.length, searchResultsCount); i++) {
+            const rawObject = githubData[i];
+            if (rawObject['size'] > 0) {
+                    topGithubResults.push({
                     'name' : rawObject['full_name'],
                     'starsCount': rawObject['stargazers_count'],
                     'description': rawObject['description'],
@@ -38,15 +42,18 @@
                     'license': rawObject['license'],
                 })
             }
-            return topGithubResults;
+            
         }
+        return topGithubResults;
 	}
 </script>
 
 <div class="github_results">
     {#await githubSearchPromise}
-        <p>...waiting for {query}</p>
+        <p class="search_status">...searching on Github</p>
     {:then repos}
+        {#if (repos.length > 0)}
+        <p class="search_title">These are the top search results from Github:</p>
         <ul class="repos_list">
             {#each repos as repo}
                 <li>
@@ -62,8 +69,12 @@
                 </li>
             {/each}
         </ul>
+        {/if}
+        {#if (repos.length == 0)}
+            <p class="search_title">A search on GitHub turned up nothing ( ͡° ͜ʖ ͡°)</p>
+        {/if}
     {:catch error}
-        <p style="color: red">{error.message}</p>
+        <p class="search_status" style="color: #FA8072">{error.message}</p>
     {/await}
 </div>
 
@@ -71,6 +82,14 @@
     .repos_list {
         padding: 0;
         list-style-type: none;
+    }
+
+    .search_status {
+        font-size: 1.5em;
+    }
+
+    .search_title {
+        font-size: 1.5em;
     }
 
 </style>
