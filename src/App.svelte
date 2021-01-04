@@ -1,60 +1,47 @@
 <script>
+	import { beforeUpdate } from 'svelte';
 	import * as data from './data.json';
 	import axios from "axios";
+	import GithubList from './GithubList.svelte';
 
-	export const github_api = axios.create({
-		baseURL: "https://api.github.com/search/"
+	beforeUpdate(async () => {
+		selectNewGod();
 	})
 
-	export const values = data.values;
-	export const count = values.length;
-	export let github_data;
-	export let randomNumber = newRandomIndex();
+	const values = data.values;
+	const count = values.length;
 
-	function newRandomIndex() {
-		return Math.floor(Math.random() * count);
+	export let name;
+	let pantheon;
+	let info;
+	let url
+	let alternatives;
+
+
+	function selectNewGod() {
+		const randomIndex = Math.floor(Math.random() * count);
+		const selectedGod = values[randomIndex];
+		name = selectedGod.name;
+		pantheon = selectedGod.pantheon;
+		info = selectedGod.title;
+		url = selectedGod.url;
+		alternatives = selectedGod.alternatives;
 	}
 
 	async function handleNextClick() {
-		randomNumber = newRandomIndex();
-		await getGithubData();
+		selectNewGod();
 	}
-
-	async function getGithubData() {
-		const githubSearchResponse = await github_api.get('repositories?q=' + values[randomNumber].name + '&sort=stars&order=desc')
-		github_data  = githubSearchResponse.data.items; 
-		
-		console.log(github_data)
-	}
-
-
 </script>
 
 <main>
-	<h1>Hello count is {count}!</h1> 
-	<h2>Random number is: {randomNumber}</h2>
-	<h2>Random name is: {values[randomNumber].name}</h2>
+	<h1>newprojectname.dev</h1> 
+	<h5>The project is named after</h5> <h1>{name}</h1>
+	<h3>{pantheon}</h3>
+	<h3>{info}</h3>
+	<h3>{url}</h3>
+	<h3>{alternatives}</h3>
 	<button on:click={handleNextClick}>Next god</button>
+
+	<GithubList query={name}/>
+
 </main>
-
-<style>
-	main {
-		text-align: center;
-		padding: 1em;
-		max-width: 240px;
-		margin: 0 auto;
-	}
-
-	h1 {
-		color: #ff3e00;
-		text-transform: uppercase;
-		font-size: 4em;
-		font-weight: 100;
-	}
-
-	@media (min-width: 640px) {
-		main {
-			max-width: none;
-		}
-	}
-</style>
