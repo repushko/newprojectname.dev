@@ -2,7 +2,7 @@
 	import { beforeUpdate } from 'svelte';
 	import * as data from './data.json';
 	import axios from "axios";
-	import GithubList from './GithubList.svelte';
+	import ReposList from './ReposList.svelte';
 
 	beforeUpdate(async () => {
 		selectNewGod();
@@ -19,8 +19,7 @@
 
 
 	function selectNewGod() {
-		const randomIndex = Math.floor(Math.random() * count);
-		const selectedGod = values[randomIndex];
+		const selectedGod = values[Math.floor(Math.random() * count)];
 		name = selectedGod.name;
 		pantheon = selectedGod.pantheon;
 		info = selectedGod.title;
@@ -34,14 +33,140 @@
 </script>
 
 <main>
-	<h1>newprojectname.dev</h1> 
-	<h5>The project is named after</h5> <h1>{name}</h1>
-	<h3>{pantheon}</h3>
-	<h3>{info}</h3>
-	<h3>{url}</h3>
-	<h3>{alternatives}</h3>
-	<button on:click={handleNextClick}>Next god</button>
+	<div class="container">
+	
+		<p class="header">
+			<span class="title">newprojectname.dev</span> <br>
+			Your next project/library name inspired by mythology
+		
 
-	<GithubList query={name}/>
+		<div class="god_info">
+			<span class="pantheon">{pantheon}</span>
+			<div class="name_section">
+				<span class="name">{name}</span>
+				{#if alternatives !== 'nan'}
+					<span class="alternatives">{alternatives}</span>
+				{/if}
+			</div>
+			<span class="description">
+				{info}. <br>
+				<a href={url} target="_blank">Read more</a>
+			</span>
+		</div>
+		
+		<div class="multi-button">
+			<button on:click={handleNextClick}>meh, go next</button>
+		</div>
 
+		<ReposList query={name}/>
+
+		<footer class="footer">
+			<p>Made with ❤️ by <a href="https://repushko.com">Anton Repushko</a>, 2021. All data provided by <a href="https://godchecker.com">godchecker.com</a></p>
+		</footer>
+
+	</div>
 </main>
+
+<style>
+	:root {
+		--border-size: 0.125rem;
+		--duration: 250ms;
+		--ease: cubic-bezier(0.215, 0.61, 0.355, 1);
+		--font-family: monospace;
+		--color-primary: white;
+		--color-secondary: black;
+		--color-tertiary: dodgerblue;
+		--shadow: rgba(0, 0, 0, 0.1);
+		--space: 1rem;
+	}
+
+	.multi-button {
+		display: flex;
+		width: 300px;
+		box-shadow: var(--shadow) 4px 4px;
+	}
+
+	.multi-button button {
+		flex-grow: 1;
+		cursor: pointer;
+		position: relative;
+		padding:
+			calc(var(--space) / 1.125)
+			var(--space)
+			var(--space);
+		border: var(--border-size) solid black;
+		color: var(--color-secondary);
+		background-color: var(--color-primary);
+		font-size: 1.5rem;
+		font-family: var(--font-family);
+		text-transform: lowercase;
+		text-shadow: var(--shadow) 2px 2px;
+		transition: flex-grow var(--duration) var(--ease);
+	}
+	.multi-button button:hover {
+		flex-grow: 2;
+		color: white;
+		outline: none;
+		text-shadow: none;
+		background-color: var(--color-secondary);
+	}
+
+	main {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.header {
+		margin-bottom: 150px;
+	}
+
+	.footer {
+		position: fixed;
+		bottom: 0;
+		width: 100%;
+		background: white;
+	}
+
+	.pantheon {
+		font-size: 16px;
+		color: rgb(173, 173, 173);
+	}
+
+	.title {
+		font-family: 'Staatliches';
+		font-size: 32px;
+	}
+
+	.container {
+		width: 60%;
+		display: flex;
+		flex-direction: column;
+	}
+
+	@media (max-width : 1280px) {
+		.container {
+			width: 90%;
+		}
+	}
+
+	.god_info {
+		margin-bottom: 50px;		
+		align-items: flex-start;
+		flex: 1 0 auto;
+	}
+	.description {
+		font-size: 32px;
+	}
+
+	.name {
+		font-family: 'Staatliches';
+		font-size: 150px;
+	}
+
+	.alternatives {
+		font-family: 'Staatliches';
+		font-size: 32px;
+	}
+</style>
