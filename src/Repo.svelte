@@ -22,6 +22,17 @@
     font-size: 1.5em;
   }
 
+  @media (max-width: 1280px) {
+    .repo-name {
+        font-size: 1em;
+    }
+
+    .svg-icon svg {
+      height: 1.5em;
+      width: 1.5em;
+  }
+
+  }
   .repo {
     margin-bottom: 3em;
   }

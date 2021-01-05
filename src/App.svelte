@@ -67,6 +67,10 @@
     background-color: var(--color-secondary);
   }
 
+  footer {
+    bottom: 40px;
+  }
+
   main {
     display: flex;
     flex-direction: column;
@@ -79,7 +83,7 @@
   }
 
   .pantheon {
-    font-size: 16px;
+    font-size: 1em;
     color: rgb(173, 173, 173);
   }
 
@@ -89,15 +93,9 @@
   }
 
   .container {
-	width: 50%;
+    width: 50%;
     display: flex;
     flex-direction: column;
-  }
-
-  @media (max-width: 1280px) {
-    .container {
-      width: 90%;
-    }
   }
 
   .god_info {
@@ -106,59 +104,86 @@
     flex: 1 0 auto;
   }
   .description {
-    font-size: 32px;
+    font-size: 2rem;
   }
 
   .name {
     font-family: "Staatliches";
-    font-size: 150px;
+    font-size: 9em;
   }
 
   .alternatives {
     font-family: "Staatliches";
-    font-size: 32px;
+    font-size: 2em;
   }
 
+  .main-content {
+    min-height: calc(100vh - 60px);
+  }
+
+  @media (max-width: 1280px) {
+    .container {
+      width: 90%;
+    }
+
+    .name {
+      font-size: 3em;
+    }
+
+    .header {
+      margin-bottom: 50px;
+    }
+
+    .multi-button {
+      width: 200px;
+    }
+
+    .description {
+      font-size: 1em;
+    }
+  }
 </style>
 
 <main>
   <div class="container">
-
-    <p class="header">
-      <span class="title">newprojectname.dev</span>
-      <br />
-      <span class="subtitle">
-        Your next project/library name inspired by mythology
-      </span>
-      <br />
-    </p>
-
-    <div class="god_info">
-      <span class="pantheon">{pantheon}</span>
-      <div class="name_section">
-        <span class="name">{name}</span>
-        {#if alternatives !== 'nan'}
-          <span class="alternatives">{alternatives}</span>
-        {/if}
-      </div>
-      <span class="description">
-        {info}
+    <div class="main-content">
+      <p class="header">
+        <span class="title">newprojectname.dev</span>
         <br />
-        <a href={url} target="_blank">Read more</a>
-      </span>
+        <span class="subtitle">
+          Your next project/library name inspired by mythology
+        </span>
+        <br />
+      </p>
+
+      <div class="god_info">
+        <span class="pantheon">{pantheon}</span>
+        <div class="name_section">
+          <span class="name">{name}</span>
+          {#if alternatives !== 'nan'}
+            <span class="alternatives">{alternatives}</span>
+          {/if}
+        </div>
+        <span class="description">
+          {info}
+          <br />
+          <a href={url} target="_blank">Read more</a>
+        </span>
+      </div>
+
+      <button class="multi-button" on:click={handleNextClick}>
+        meh, go next
+      </button>
+
+      <ReposList query={name} />
     </div>
 
-    <button class="multi-button" on:click={handleNextClick}>
-      meh, go next
-    </button>
-
-    <ReposList query={name} />
-
-    <!---<footer>
+    <footer>
       Made with ❤️ by
       <a href="https://github.com/repushko">Anton Repushko</a>
-      , 2021. All data are based on
+      , 2021
+       <br> All data are based on
       <a href="https://godchecker.com">godchecker.com</a>
-    </footer>-->
+    </footer>
   </div>
 </main>

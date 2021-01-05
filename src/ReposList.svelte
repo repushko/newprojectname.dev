@@ -71,7 +71,7 @@
         </ul>
         {/if}
         {#if (repos.length == 0)}
-            <p class="search_title">A search on GitHub turned up nothing ( ͡° ͜ʖ ͡°)</p>
+            <p class="search_title">A search on GitHub turned up nothing <nobr>( ͡° ͜ʖ ͡°)</nobr></p>
         {/if}
     {:catch error}
         <p class="search_status" style="color: #FA8072">{error.message}</p>
@@ -91,5 +91,15 @@
     .search_title {
         font-size: 1.5em;
     }
+
+    @media (max-width: 1280px) {
+    .search_status {
+        font-size: 1em;
+    }
+
+    .search_title {
+        font-size: 1em;
+    }
+  }
 
 </style>
