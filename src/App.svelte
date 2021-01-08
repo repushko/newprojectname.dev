@@ -1,30 +1,29 @@
 <script>
   import { beforeUpdate } from "svelte";
+
   import * as data from "./data.json";
-  import axios from "axios";
   import ReposList from "./ReposList.svelte";
 
-  beforeUpdate(async () => {
-    selectNewGod();
-  });
-
   const values = data.values;
-  const count = values.length;
 
-  export let name;
+  let name;
   let pantheon;
   let info;
   let url;
   let alternatives;
 
   function selectNewGod() {
-    const selectedGod = values[Math.floor(Math.random() * count)];
+    const selectedGod = values[Math.floor(Math.random() * values.length)];
     name = selectedGod.name;
     pantheon = selectedGod.pantheon;
     info = selectedGod.title;
     url = selectedGod.url;
     alternatives = selectedGod.alternatives;
   }
+
+  beforeUpdate(async () => {
+    selectNewGod();
+  });
 
   async function handleNextClick() {
     selectNewGod();
@@ -34,16 +33,25 @@
 <style>
   :root {
     --border-size: 0.125rem;
-    --duration: 250ms;
-    --ease: cubic-bezier(0.215, 0.61, 0.355, 1);
     --font-family: monospace;
     --color-primary: white;
     --color-secondary: black;
-    --color-tertiary: dodgerblue;
     --shadow: rgba(0, 0, 0, 0.1);
     --space: 1rem;
   }
-  .multi-button {
+  footer {
+    bottom: 40px;
+  }
+  main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .god-info-text {
+    font-size: 2em;
+  }
+  .next-button {
     width: 300px;
     box-shadow: var(--shadow) 4px 4px;
     margin-bottom: 25px;
@@ -57,88 +65,59 @@
     font-family: var(--font-family);
     text-transform: lowercase;
     text-shadow: var(--shadow) 2px 2px;
-    transition: flex-grow var(--duration) var(--ease);
   }
-  .multi-button:hover {
+  .next-button:hover {
     flex-grow: 2;
     color: white;
     outline: none;
     text-shadow: none;
     background-color: var(--color-secondary);
   }
-
-  footer {
-    bottom: 40px;
-  }
-
-  main {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .header {
+  .project-header {
     margin-bottom: 150px;
   }
-
-  .pantheon {
-    font-size: 1em;
+  .project-title {
+    font-family: "Staatliches";
+    font-size: 2em;
+  }
+  .god-pantheon {
     color: rgb(173, 173, 173);
   }
-
-  .title {
-    font-family: "Staatliches";
-    font-size: 32px;
-  }
-
   .container {
     width: 50%;
     display: flex;
     flex-direction: column;
   }
-
-  .god_info {
+  .god-info {
     margin-bottom: 50px;
     align-items: flex-start;
     flex: 1 0 auto;
   }
-  .description {
-    font-size: 2rem;
-  }
-
-  .name {
+  .god-name {
     font-family: "Staatliches";
     font-size: 9em;
   }
-
-  .alternatives {
+  .god-name-alternatives {
     font-family: "Staatliches";
     font-size: 2em;
   }
-
-  .main-content {
+  .info {
     min-height: calc(100vh - 60px);
   }
-
   @media (max-width: 1280px) {
     .container {
       width: 90%;
     }
-
-    .name {
+    .god-name {
       font-size: 3em;
     }
-
-    .header {
+    .project-header {
       margin-bottom: 50px;
     }
-
-    .multi-button {
+    .next-button {
       width: 200px;
     }
-
-    .description {
+    .god-info-text {
       font-size: 1em;
     }
   }
@@ -146,32 +125,29 @@
 
 <main>
   <div class="container">
-    <div class="main-content">
-      <p class="header">
-        <span class="title">newprojectname.dev</span>
+    <div class="info">
+      <p class="project-header">
+        <span class="project-title">newprojectname.dev</span>
         <br />
-        <span class="subtitle">
-          Your next project/library name inspired by mythology
-        </span>
-        <br />
+        <span>Your next project/library name inspired by mythology</span>
       </p>
 
-      <div class="god_info">
-        <span class="pantheon">{pantheon}</span>
-        <div class="name_section">
-          <span class="name">{name}</span>
+      <div class="god-info">
+        <span class="god-pantheon">{pantheon}</span>
+        <div>
+          <span class="god-name">{name}</span>
           {#if alternatives !== 'nan'}
-            <span class="alternatives">{alternatives}</span>
+            <span class="god-name-alternatives">{alternatives}</span>
           {/if}
         </div>
-        <span class="description">
+        <span class="god-info-text">
           {info}
           <br />
           <a href={url} target="_blank">Read more</a>
         </span>
       </div>
 
-      <button class="multi-button" on:click={handleNextClick}>
+      <button class="next-button" on:click={handleNextClick}>
         meh, go next
       </button>
 
@@ -182,7 +158,8 @@
       Made with ❤️ by
       <a href="https://github.com/repushko">Anton Repushko</a>
       , 2021
-       <br> All data are based on
+      <br />
+      All data are based on
       <a href="https://godchecker.com">godchecker.com</a>
     </footer>
   </div>
