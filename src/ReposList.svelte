@@ -93,7 +93,7 @@
       </ul>
     {/if}
     {#if repos.length == 0}
-      <p class="search-title">
+      <p class="search-status">
         A search on GitHub turned up nothing
         <nobr>( ͡° ͜ʖ ͡°)</nobr>
       </p>
